@@ -1,18 +1,17 @@
-import { ThreeDots } from 'react-loader-spinner';
+import { ProgressBar } from 'react-loader-spinner';
 import { Wrapper } from './Loader.styled';
 
 export function Loader() {
   return (
     <Wrapper>
-      <ThreeDots
+      <ProgressBar
         height="80"
         width="80"
-        radius="9"
-        color="#00BFFF"
-        ariaLabel="three-dots-loading"
+        ariaLabel="progress-bar-loading"
         wrapperStyle={{}}
-        wrapperClassName=""
-        visible={true}
+        wrapperClass="progress-bar-wrapper"
+        borderColor="#51E5FF"
+        barColor="#51E5FF"
       />
     </Wrapper>
   );
