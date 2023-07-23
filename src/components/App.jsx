@@ -5,8 +5,9 @@ import { Button } from './Button/Button.jsx';
 import { Loader } from './Loader/Loader.jsx';
 import * as API from '..//components//api/PixabayApi.js';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
-  notificationMassege,
+  errorMessage,
   notificationOptions,
 } from './Notification/Notification.jsx';
 import { Message } from './Message/Message.jsx';
@@ -30,15 +31,16 @@ export const App = () => {
         const data = await API.getImages(searchQuery, currentPage);
 
         if (data.hits.length === 0) {
-          toast.warn(`${notificationMassege}`, notificationOptions);
+          toast.warn(`${errorMessage}`, notificationOptions);
+        } else {
+          const normalizedImages = API.normalizedImages(data.hits);
+          setImages(images => [...images, ...normalizedImages]);
+          setIsLoading(false);
+          setError('');
+          setTotalPages(Math.ceil(data.totalHits / 12));
         }
-
-        const normalizedImages = API.normalizedImages(data.hits);
-        setImages(images => [...images, ...normalizedImages]);
-        setIsLoading(false);
-        setError('');
-        setTotalPages(Math.ceil(data.totalHits / 12));
       } catch (error) {
+        setError(error.message);
         toast.error(
           `Oops, something went wrong. Please try again.`,
           notificationOptions
@@ -47,6 +49,7 @@ export const App = () => {
         setIsLoading(false);
       }
     }
+
     fetchImages();
   }, [currentPage, searchQuery]);
 
